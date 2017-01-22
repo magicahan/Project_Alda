@@ -1,4 +1,4 @@
-# Project_DALA
+# Project Alda
 
 CAPP 30122: Computer Science with Applications-2
 
