@@ -12,7 +12,7 @@
 
 
 
-import requests
+# import requests
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
@@ -193,7 +193,7 @@ if __name__ == "__main__":
 		except NoSuchElementException:
 			continue
 
-	# dept_ls = dept_ls[:1]
+	dept_ls = dept_ls[:1]
 	# dept_ls = dept_ls[:5]
 	driver, courses_dict = course_crawler(dept_ls, driver, courses_dict)
 	driver.save_screenshot('screen.png')
