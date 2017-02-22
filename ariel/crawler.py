@@ -205,7 +205,7 @@ if __name__ == "__main__":
 	print('There are {:} departments in total.'.format(len(dept_ls)))
 	
 	# dept_ls = dept_ls[:1]
-	dept_ls = dept_ls[:5]
+	# dept_ls = dept_ls[:5]
 
 	courses_dict, dept = course_crawler(dept_ls, courses_dict, course_url)	
 	# print(courses_dict)
