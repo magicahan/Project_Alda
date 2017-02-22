@@ -57,6 +57,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		wait.until(EC.visibility_of(test))
 
 		driver.save_screenshot('screen2.png')
+
 		coursekey = driver.find_element_by_id('win0divUC_CLS_DTL_WRK_HTMLAREA$0')
 		coursekey = coursekey.text.split()
 		coursename = driver.find_element_by_id('UC_CLS_DTL_WRK_UC_CLASS_TITLE$0')
@@ -156,17 +157,27 @@ def one_dept_crawler(dept, driver, courses_dict):
 
 
 def course_crawler(dept_ls, driver, courses_dict):
+	errorls = []
 	for dept in dept_ls:
 		print('this is dept: ' + dept)
-		searchbutton, courses_dict = one_dept_crawler(dept, 
+		dothething = True
+		while dothething == True:
+			try:
+				searchbutton, courses_dict = one_dept_crawler(dept, 
 						driver, courses_dict)
-		wait = WebDriverWait(driver, 10)
-		wait.until(EC.staleness_of(searchbutton))
-		
-		print(dept + 'finished')
+				wait = WebDriverWait(driver, 10)
+				wait.until(EC.staleness_of(searchbutton))
+				print(dept + 'finished')
+				break
+			except StaleElementReferenceException:
+				errorls.append(dept)
+				continue
+			except NoSuchElementException:
+				errorls.append(dept)
+				continue
 		
 
-	return (driver, courses_dict)
+	return (driver, courses_dict, errorls)
 
 
 # def test_function(driver):
@@ -195,7 +206,7 @@ if __name__ == "__main__":
 
 	# dept_ls = dept_ls[:1]
 	# dept_ls = dept_ls[:5]
-	driver, courses_dict = course_crawler(dept_ls, driver, courses_dict)
+	driver, courses_dict, errorls = course_crawler(dept_ls, driver, courses_dict)
 	driver.save_screenshot('screen.png')
 	print(courses_dict)
 	driver.quit()
