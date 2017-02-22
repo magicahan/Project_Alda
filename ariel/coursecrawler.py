@@ -4,6 +4,11 @@ import requests
 # import bs4
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
+
 
 
 def find_dept_ls(course_url):
@@ -30,8 +35,12 @@ def find_dept_ls(course_url):
 def one_page_crawler(results_one_page, driver, courses_dict):
 	for i in range(results_one_page):
 		coursechunk = 'DESCR100$0_row_' + str(i)
+		test = driver.find_element_by_id('win0divUC_SR0047_WRK_GROUPBOX18$0')
 		driver.find_element_by_id(coursechunk).click()
-		driver.implicitly_wait(30)
+
+		wait = WebDriverWait(driver, 10)
+		wait.until(EC.visibility_of(test))
+
 		driver.save_screenshot('screen.png')
 		coursekey = driver.find_element_by_id('win0divUC_CLS_DTL_WRK_HTMLAREA$0')
 		coursekey = coursekey.text.split()
@@ -75,7 +84,11 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 			courses_dict[courseid]['subsections'] = []
 
 		returnid = 'UC_CLS_DTL_WRK_RETURN_PB$0'
+		test = driver.find_element_by_id(returnid)
 		driver.find_element_by_id(returnid).click()
+
+		wait = WebDriverWait(driver, 10)
+		wait.until(EC.staleness_of(test))
 
 	return courses_dict
 
@@ -90,18 +103,18 @@ def one_dept_crawler(dept_select, dept, driver, searchbutton, courses_dict):
 		pages = resultsize // 25 + 1
 
 	while pages > 1:
-		results_one_page = 25
-		one_page_crawler()
-		# then click next page
+		for page in range(pages - 1):
+			results_one_page = 25
+			courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
+			
+			
+			# then click next page
 		pages = pages - 1
 
 	# elif pages = 1:
 	# 	results_one_page = resultsize % 25
 	# 	one_page_crawler()
 		
-
-
-
 
 
 def course_crawler(dept_select, dept_ls, driver):
@@ -111,19 +124,28 @@ def course_crawler(dept_select, dept_ls, driver):
 		searchbutton.click()
 
 
-
-
-
-
-
-
-
+def test_function(driver):
+	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
+	resultsize = int(resultsize)
+	testdic = one_page_crawler(resultsize, driver, courses_dict)
+	driver.save_screenshot('screen2.png')
+	driver.quit()
+	return courses_dict
 
 if __name__ == "__main__":
 	course_url = 'https://coursesearch.uchicago.edu/psc/prdguest/EMPLOYEE/HRMS/c/UC_STUDENT_RECORDS_FL.UC_CLASS_SEARCH_FL.GBL'
 
 	courses_dict = dict()
-	dept_select, dept_ls, driver = find_dept_ls(course_url)
+	dothething = True
+	while dothething == True:
+		try:
+			dept_select, dept_ls, driver = find_dept_ls(course_url)
+			break
+		except StaleElementReferenceException:
+			continue
+		except NoSuchElementException:
+			continue
+
 
 	driver.implicitly_wait(10)
 	driver.save_screenshot('screen0.png')
@@ -132,13 +154,17 @@ if __name__ == "__main__":
 	dept_select.select_by_value(dept_ls[0])
 
 	searchbutton.click()
-	driver.implicitly_wait(10)
+
+	test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
+
+	wait = WebDriverWait(driver, 10)
+	wait.until(EC.staleness_of(test))
+
 	driver.save_screenshot('screen1.png')
 
-	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
+	courses_dict = test_function(driver)
+	print(courses_dict)
 
-	resultsize = int(resultsize)
 
-	testdic = one_page_crawler(resultsize, driver, courses_dict)
 
-	driver.quit()
+	
