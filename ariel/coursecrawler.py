@@ -1,7 +1,18 @@
+### Project Alda
+### Course Crawler
+### Ningyin Xu Feb. 22nd
+
+###############################################################################
+	
+	# To run this, you need to install selenium package, and its phantom driver.
+	# Reference Webpage:
+	# http://stackoverflow.com/questions/13287490/is-there-a-way-to-use-phantomjs-in-python
+
+###############################################################################
+
+
+
 import requests
-# import getpass
-# from util import *
-# import bs4
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
@@ -23,13 +34,15 @@ def find_dept_ls(course_url):
 	# driver.save_screenshot('screen.png')
 	driver.implicitly_wait(20)
 
-	dept_select = Select(driver.find_element_by_id('UC_CLSRCH_WRK2_SUBJECT'))
+	dept_btn_id = 'UC_CLSRCH_WRK2_SUBJECT'
+	dept_btn = driver.find_element_by_id(dept_btn_id)
+	dept_select = Select(dept_btn)
 	depts = dept_select.options
 	dept_ls = []
 	for i in depts[1:]:
 		dept_ls.append(i.get_attribute('value'))
 
-	return (dept_select, dept_ls, driver)
+	return (dept_ls, driver)
 
 
 def one_page_crawler(results_one_page, driver, courses_dict):
@@ -41,7 +54,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		wait = WebDriverWait(driver, 10)
 		wait.until(EC.visibility_of(test))
 
-		driver.save_screenshot('screen.png')
+		driver.save_screenshot('screen2.png')
 		coursekey = driver.find_element_by_id('win0divUC_CLS_DTL_WRK_HTMLAREA$0')
 		coursekey = coursekey.text.split()
 		coursename = driver.find_element_by_id('UC_CLS_DTL_WRK_UC_CLASS_TITLE$0')
@@ -93,9 +106,22 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 	return courses_dict
 
 
-def one_dept_crawler(dept_select, dept, driver, searchbutton, courses_dict):
+def one_dept_crawler(dept, driver, courses_dict):
+	dept_btn = driver.find_element_by_id('UC_CLSRCH_WRK2_SUBJECT')
+	# wait = WebDriverWait(driver, 10)
+	# wait.until(EC.staleness_of())
+
+	dept_select = Select(dept_btn)
 	dept_select.select_by_value(dept)
+
+	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	searchbutton.click()
+
+	test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
+	wait = WebDriverWait(driver, 10)
+	wait.until(EC.staleness_of(test))
+	driver.save_screenshot('screen1.png')
+
 	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
 	resultsize = int(resultsize)
 	pages = 1
@@ -103,34 +129,51 @@ def one_dept_crawler(dept_select, dept, driver, searchbutton, courses_dict):
 		pages = resultsize // 25 + 1
 
 	while pages > 1:
-		for page in range(pages - 1):
-			results_one_page = 25
-			courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
-			
-			
-			# then click next page
+		print('this is dept: ' + dept + 'page (reversely)' + str(pages))
+		results_one_page = 25
+		pagedown = driver.find_element_by_id('UC_RSLT_NAV_WRK_SEARCH_CONDITION2$46$')
+		courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
+		pagedown.click()
+
+		wait = WebDriverWait(driver, 10)
+		wait.until(EC.staleness_of(pagedown))
+		driver.save_screenshot('screen3.png')
+		print('page (reversely)' + str(pages) + 'finished')
 		pages = pages - 1
 
-	# elif pages = 1:
-	# 	results_one_page = resultsize % 25
-	# 	one_page_crawler()
+
+	if pages == 1:
+		print('this is dept: ' + dept + ', it only have one page or this is its last page')
+		results_one_page = resultsize % 25
+		courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
+		driver.save_screenshot('screen3.png')
+		print('this page finished')
+	
+
+	return (searchbutton, courses_dict)
+
+
+def course_crawler(dept_ls, driver, courses_dict):
+	for dept in dept_ls:
+		print('this is dept:' + dept)
+		searchbutton, courses_dict = one_dept_crawler(dept, 
+						driver, courses_dict)
+		wait = WebDriverWait(driver, 10)
+		wait.until(EC.staleness_of(searchbutton))
+		
+		print(dept + 'finished')
 		
 
-
-def course_crawler(dept_select, dept_ls, driver):
-	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
-	for dept in dept_ls:
-		dept_select.select_by_value(dept)
-		searchbutton.click()
+	return (driver, courses_dict)
 
 
-def test_function(driver):
-	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
-	resultsize = int(resultsize)
-	testdic = one_page_crawler(resultsize, driver, courses_dict)
-	driver.save_screenshot('screen2.png')
-	driver.quit()
-	return courses_dict
+# def test_function(driver):
+# 	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
+# 	resultsize = int(resultsize)
+# 	testdic = one_page_crawler(resultsize, driver, courses_dict)
+# 	driver.save_screenshot('screen2.png')
+# 	driver.quit()
+# 	return courses_dict
 
 if __name__ == "__main__":
 	course_url = 'https://coursesearch.uchicago.edu/psc/prdguest/EMPLOYEE/HRMS/c/UC_STUDENT_RECORDS_FL.UC_CLASS_SEARCH_FL.GBL'
@@ -139,31 +182,20 @@ if __name__ == "__main__":
 	dothething = True
 	while dothething == True:
 		try:
-			dept_select, dept_ls, driver = find_dept_ls(course_url)
+			dept_ls, driver = find_dept_ls(course_url)
+			print('initial driver ready')
+			driver.save_screenshot('screen0.png')
 			break
 		except StaleElementReferenceException:
 			continue
 		except NoSuchElementException:
 			continue
 
-
-	driver.implicitly_wait(10)
-	driver.save_screenshot('screen0.png')
-	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
-
-	dept_select.select_by_value(dept_ls[0])
-
-	searchbutton.click()
-
-	test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
-
-	wait = WebDriverWait(driver, 10)
-	wait.until(EC.staleness_of(test))
-
-	driver.save_screenshot('screen1.png')
-
-	courses_dict = test_function(driver)
+	# dept_ls = dept_ls[:5]
+	driver, courses_dict = course_crawler(dept_ls, driver, courses_dict)
+	driver.save_screenshot('screen.png')
 	print(courses_dict)
+	driver.quit()
 
 
 
