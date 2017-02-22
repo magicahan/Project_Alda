@@ -19,7 +19,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
-
+import json
+import csv
+import pandas as pd
 
 
 def find_dept_ls(course_url):
@@ -155,7 +157,7 @@ def one_dept_crawler(dept, driver, courses_dict):
 
 def course_crawler(dept_ls, driver, courses_dict):
 	for dept in dept_ls:
-		print('this is dept:' + dept)
+		print('this is dept: ' + dept)
 		searchbutton, courses_dict = one_dept_crawler(dept, 
 						driver, courses_dict)
 		wait = WebDriverWait(driver, 10)
@@ -191,11 +193,25 @@ if __name__ == "__main__":
 		except NoSuchElementException:
 			continue
 
+	# dept_ls = dept_ls[:1]
 	# dept_ls = dept_ls[:5]
 	driver, courses_dict = course_crawler(dept_ls, driver, courses_dict)
 	driver.save_screenshot('screen.png')
 	print(courses_dict)
 	driver.quit()
+
+	with open('course_output.json', 'w') as f:
+		json.dump(courses_dict, f, ensure_ascii = False)
+
+	coursedf = pd.DataFrame.from_dict(courses_dict, orient = 'index')
+
+	coursedf.to_csv('course_output.csv', sep = '|')
+
+	
+
+
+	
+	
 
 
 
