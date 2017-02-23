@@ -103,7 +103,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		courses_dict[courseid]['description'] = coursedscp
 		courses_dict[courseid]['condition'] = coursecondition
 
-		if coursecondition == 'Open':
+		if coursecondition == 'Open' and sectionid != '[43157]':
 			sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
 			if len(sub) != 0:
 				courses_dict[courseid]['subsections'] = list()
@@ -220,9 +220,11 @@ def course_crawler(dept_ls, courses_dict, course_url):
 				courses_dict, timeoutdept_ls = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
 				break
 			except StaleElementReferenceException:
+				print('StaleElementRefernceException')
 				dothething += 1
 				continue
 			except NoSuchElementException:
+				print('NoSuchElementException')
 				dothething += 1
 				continue
 		if dothething >= 5:
