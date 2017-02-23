@@ -19,6 +19,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import TimeoutException
 import json
 import csv
 import pandas as pd
@@ -142,10 +143,19 @@ def one_dept_crawler(dept, courses_dict, course_url):
 	searchbutton.click()
 
 	# test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
-	wait = WebDriverWait(driver, 60)
-	# wait.until(EC.staleness_of(test))
-	wait.until(EC.staleness_of(searchbutton))
-	driver.save_screenshot('screen1.png')
+	waittime = 10
+	dothething = True
+	while dothething:
+		try:
+			wait = WebDriverWait(driver, waittime)
+			wait.until(EC.staleness_of(searchbutton))
+			driver.save_screenshot('screen1.png')
+			break
+			# wait.until(EC.staleness_of(test))
+		except TimeoutException:
+			waittime += 10
+			continue
+	
 
 	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
 	resultsize = int(resultsize)
