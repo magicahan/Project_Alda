@@ -172,32 +172,36 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 		courses_dict = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
 		return courses_dict
 
-	if resultsize > 25:
-		pages = resultsize // 25 + 1
+	else:
+		if resultsize > 25:
+			if resultsize % 25 != 0:
+				pages = resultsize // 25 + 1
+			else:
+				pages = resultsize / 25
 
-	while pages > 1:
-		print('this is dept: ' + dept + ' page (reversely) ' + str(pages))
-		results_one_page = 25
-		pagedown = driver.find_element_by_id('UC_RSLT_NAV_WRK_SEARCH_CONDITION2$46$')
-		courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
-		pagedown.click()
+		while pages > 1:
+			print('this is dept: ' + dept + ' page (reversely) ' + str(pages))
+			results_one_page = 25
+			pagedown = driver.find_element_by_id('UC_RSLT_NAV_WRK_SEARCH_CONDITION2$46$')
+			courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
+			pagedown.click()
 
-		wait = WebDriverWait(driver, 10)
-		wait.until(EC.staleness_of(pagedown))
-		driver.save_screenshot('screen3.png')
-		print('page ' + str(pages) + ' (reversely) finished')
-		pages = pages - 1
+			wait = WebDriverWait(driver, 10)
+			wait.until(EC.staleness_of(pagedown))
+			driver.save_screenshot('screen3.png')
+			print('page ' + str(pages) + ' (reversely) finished')
+			pages = pages - 1
 
 
-	if pages == 1:
-		print('this is dept: ' + dept + ', it only has one page or this is its last page')
-		results_one_page = resultsize % 25
-		courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
-		driver.save_screenshot('screen3.png')
-		print('this page finished')
-	
-	driver.quit()
-	return (courses_dict, timeoutdept_ls)
+		if pages == 1:
+			print('this is dept: ' + dept + ', it only has one page or this is its last page')
+			results_one_page = resultsize % 25
+			courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
+			driver.save_screenshot('screen3.png')
+			print('this page finished')
+		
+		driver.quit()
+		return (courses_dict, timeoutdept_ls)
 
 
 def course_crawler(dept_ls, courses_dict, course_url):
