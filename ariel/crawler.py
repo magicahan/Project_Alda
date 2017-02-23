@@ -89,6 +89,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		sectionid = coursekey[2]
 		coursetype = coursekey[4]
 		coursecondition = coursekey[-1]
+		
 		courses_dict[courseid] = dict()
 		courses_dict[courseid]['name'] = coursename
 		courses_dict[courseid]['section'] = section
@@ -101,7 +102,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		courses_dict[courseid]['description'] = coursedscp
 		courses_dict[courseid]['condition'] = coursecondition
 
-		if courseconditon == 'Open':
+		if coursecondition == 'Open':
 			sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
 			if len(sub) != 0:
 				courses_dict[courseid]['subsections'] = list()
