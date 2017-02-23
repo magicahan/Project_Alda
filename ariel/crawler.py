@@ -131,7 +131,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 	return courses_dict
 
 
-def one_dept_crawler(dept, courses_dict, course_url):
+def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 
 	driver = setup_driver(course_url)
 
@@ -158,7 +158,8 @@ def one_dept_crawler(dept, courses_dict, course_url):
 	if waittime >= 120:
 		print('this dept ' + dept + ' is not scraped, get to next one')
 		driver.quit()
-		return courses_dict
+		timeoutdept_ls.append(dept)
+		return (courses_dict, timeoutdept_ls)
 	
 
 	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
@@ -196,7 +197,7 @@ def one_dept_crawler(dept, courses_dict, course_url):
 		print('this page finished')
 	
 	driver.quit()
-	return courses_dict
+	return (courses_dict, timeoutdept_ls)
 
 
 def course_crawler(dept_ls, courses_dict, course_url):
@@ -205,16 +206,19 @@ def course_crawler(dept_ls, courses_dict, course_url):
 		dothething = True
 		while dothething:
 			try:
-				courses_dict = one_dept_crawler(dept, courses_dict, course_url)
+				timeoutdept_ls = []
+				courses_dict, timeoutdept_ls = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
 				break
 			except StaleElementReferenceException:
-				return (courses_dict, dept)
+				timeoutdept_ls = [dept]
+				return (courses_dict, timeoutdept_ls)
 			except NoSuchElementException:
-				return (courses_dict, dept)
+				timeoutdept_ls = [dept]
+				return (courses_dict, timeoutdept_ls)
 
 		print(dept + 'finished')
 
-	return (courses_dict, '')
+	return (courses_dict, timeoutdept_ls)
 
 
 if __name__ == "__main__":
@@ -227,9 +231,9 @@ if __name__ == "__main__":
 	# dept_ls = dept_ls[:1]
 	# dept_ls = dept_ls[:5]
 
-	courses_dict, dept = course_crawler(dept_ls, courses_dict, course_url)	
+	courses_dict, timeoutdept_ls = course_crawler(dept_ls, courses_dict, course_url)	
 	# print(courses_dict)
-	print(dept)
+	print(timeoutdept_ls)
 
 	with open('course_output.json', 'w') as f:
 		json.dump(courses_dict, f, ensure_ascii = False)
