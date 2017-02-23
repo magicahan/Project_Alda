@@ -145,7 +145,7 @@ def one_dept_crawler(dept, courses_dict, course_url):
 	# test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	waittime = 10
 	dothething = True
-	while dothething:
+	while waittime < 120:
 		try:
 			wait = WebDriverWait(driver, waittime)
 			wait.until(EC.staleness_of(searchbutton))
@@ -155,6 +155,10 @@ def one_dept_crawler(dept, courses_dict, course_url):
 		except TimeoutException:
 			waittime += 10
 			continue
+	if waittime >= 120:
+		print('this dept ' + dept + ' is not scraped, get to next one')
+		driver.quit()
+		return courses_dict
 	
 
 	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
