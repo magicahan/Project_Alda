@@ -144,7 +144,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 
 	# test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	waittime = 10
-	dothething = True
+	
 	while waittime < 120:
 		try:
 			wait = WebDriverWait(driver, waittime)
@@ -161,9 +161,15 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 		timeoutdept_ls.append(dept)
 		return (courses_dict, timeoutdept_ls)
 	
-
-	resultsize = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text.split()[0]
-	resultsize = int(resultsize)
+	
+	result = driver.find_element_by_id('UC_RSLT_NAV_WRK_PTPG_ROWS_GRID').text
+	if len(result) == 0:
+		print('this dept ' + dept + ' does not have result')
+		driver.quit()
+		return (courses_dict, timeoutdept_ls)
+	else:
+		resultsize = result.split()[0]
+		resultsize = int(resultsize)
 	pages = 1
 
 	if resultsize == 250 and dept != 'EVOL':
