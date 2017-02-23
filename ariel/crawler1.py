@@ -103,21 +103,28 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		courses_dict[courseid]['description'] = coursedscp
 		courses_dict[courseid]['condition'] = coursecondition
 
-		if coursecondition == 'Open' and sectionid != '[43157]':
-			sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
-			if len(sub) != 0:
-				courses_dict[courseid]['subsections'] = list()
-				subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
-				for i in range(subcounts):
-					courses_dict[courseid]['subsections'].append(dict())
-					subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
-					subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
-					subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
-					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
-					courses_dict[courseid]['subsections'][i]['instructor'] = subinstructor
-					courses_dict[courseid]['subsections'][i]['daytime'] = subtime
-			else:
-				courses_dict[courseid]['subsections'] = []
+		
+		dothething = True
+		while dothething:
+			try:
+				sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
+				break
+			except NoSuchElementException:
+				sub = ''
+				dothething = False
+				
+		if len(sub) != 0:
+			courses_dict[courseid]['subsections'] = list()
+			subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
+			for i in range(subcounts):
+				courses_dict[courseid]['subsections'].append(dict())
+				subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
+				subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
+				subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
+				courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+				courses_dict[courseid]['subsections'][i]['instructor'] = subinstructor
+				courses_dict[courseid]['subsections'][i]['daytime'] = subtime
+			
 		else:
 			courses_dict[courseid]['subsections'] = []
 
@@ -243,18 +250,19 @@ if __name__ == "__main__":
 	dept_ls = find_dept_ls(course_url)
 	print('There are {:} departments in total.'.format(len(dept_ls)))
 	
-	dept_ls = dept_ls[118:]
+	# dept_ls = dept_ls[118:]
 
 	courses_dict, timeoutdept_ls = course_crawler(dept_ls, courses_dict, course_url)	
 	# print(courses_dict)
 	print(timeoutdept_ls)
 
-	with open('course_outputafterNEHC.json', 'w') as f:
+	with open('course_output111.json', 'w') as f:
 		json.dump(courses_dict, f, ensure_ascii = False)
 
 	coursedf = pd.DataFrame.from_dict(courses_dict, orient = 'index')
+	coursedf.sort_index(axis=1, inplace = True)
 
-	coursedf.to_csv('course_outputafterNEHC.csv', sep = '|')
+	coursedf.to_csv('course_output111.csv', sep = '|')
 
 	
 
