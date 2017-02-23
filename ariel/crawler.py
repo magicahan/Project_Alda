@@ -142,7 +142,7 @@ def one_dept_crawler(dept, courses_dict, course_url):
 	searchbutton.click()
 
 	# test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
-	wait = WebDriverWait(driver, 10)
+	wait = WebDriverWait(driver, 20)
 	# wait.until(EC.staleness_of(test))
 	wait.until(EC.staleness_of(searchbutton))
 	driver.save_screenshot('screen1.png')
