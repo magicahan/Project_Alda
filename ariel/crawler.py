@@ -169,7 +169,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 	if resultsize == 250:
 		print("something's wrong, crawl this dept from beginning")
 		driver.quit()
-		courses_dict = one_dept_crawler(dept, courses_dict, course_url)
+		courses_dict = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
 		return courses_dict
 
 	if resultsize > 25:
