@@ -73,6 +73,8 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		section = coursekey[1][-1]
 		sectionid = coursekey[2]
 		coursetype = coursekey[4]
+		coursecondition = coursekey[-1]
+		
 		courses_dict[courseid] = dict()
 		courses_dict[courseid]['name'] = coursename
 		courses_dict[courseid]['section'] = section
@@ -83,19 +85,23 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		courses_dict[courseid]['daytime'] = daytime
 		courses_dict[courseid]['career'] = career
 		courses_dict[courseid]['description'] = coursedscp
+		courses_dict[courseid]['condition'] = coursecondition
 
-		sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
-		if len(sub) != 0:
-			courses_dict[courseid]['subsections'] = list()
-			subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
-			for i in range(subcounts):
-				courses_dict[courseid]['subsections'].append(dict())
-				subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
-				subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
-				subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
-				courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
-				courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
-				courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+		if coursecondition == 'Open':
+			sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
+			if len(sub) != 0:
+				courses_dict[courseid]['subsections'] = list()
+				subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
+				for i in range(subcounts):
+					courses_dict[courseid]['subsections'].append(dict())
+					subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
+					subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
+					subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
+					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+			else:
+				courses_dict[courseid]['subsections'] = []
 		else:
 			courses_dict[courseid]['subsections'] = []
 
