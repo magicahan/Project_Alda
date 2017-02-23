@@ -114,8 +114,8 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 					subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
 					subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
 					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
-					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
-					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+					courses_dict[courseid]['subsections'][i]['instructor'] = subinstructor
+					courses_dict[courseid]['subsections'][i]['daytime'] = subtime
 			else:
 				courses_dict[courseid]['subsections'] = []
 		else:
@@ -203,18 +203,21 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 def course_crawler(dept_ls, courses_dict, course_url):
 	for dept in dept_ls:
 		print('this is dept: ' + dept)
-		dothething = True
-		while dothething:
+		dothething = 0
+		while dothething < 5:
 			try:
 				timeoutdept_ls = []
 				courses_dict, timeoutdept_ls = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
 				break
 			except StaleElementReferenceException:
-				timeoutdept_ls = [dept]
-				return (courses_dict, timeoutdept_ls)
+				dothething += 1
+				continue
 			except NoSuchElementException:
-				timeoutdept_ls = [dept]
-				return (courses_dict, timeoutdept_ls)
+				dothething += 1
+				continue
+		if dothething >= 5:
+			timeoutdept_ls = dept
+			return(courses_dict, timeoutdept_ls)
 
 		print(dept + 'finished')
 
