@@ -84,8 +84,8 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		loc = driver.find_element_by_id('MTG_LOC$0').text
 		career = driver.find_element_by_id('PSXLATITEM_XLATLONGNAME$33$$0').text
 		
-		courseid = coursekey[0] + coursekey[1][:-2]
-		section = coursekey[1][-1]
+		courseid = coursekey[0] + coursekey[1][:5]
+		section = coursekey[1][6:]
 		sectionid = coursekey[2]
 		coursetype = coursekey[4]
 		courses_dict[courseid] = dict()
@@ -182,7 +182,11 @@ def one_dept_crawler(dept, courses_dict, course_url):
 def course_crawler(dept_ls, courses_dict, course_url):
 	for dept in dept_ls:
 		print('this is dept: ' + dept)
-		dothething = True
+		if dept == 'CMST':
+			dothething = False
+			print('i give up on this.. will deal with it later')
+		else:
+			dothething = True
 		while dothething:
 			try:
 				courses_dict = one_dept_crawler(dept, courses_dict, course_url)
