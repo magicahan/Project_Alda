@@ -166,7 +166,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 	resultsize = int(resultsize)
 	pages = 1
 
-	if resultsize == 250:
+	if resultsize == 250 and dept != 'EVOL':
 		print("something's wrong, crawl this dept from beginning")
 		driver.quit()
 		courses_dict = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
