@@ -11,8 +11,6 @@
 ###############################################################################
 
 
-
-# import requests
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
@@ -36,7 +34,7 @@ def setup_driver(course_url):
 			quarter_select = Select(driver.find_element_by_id('UC_CLSRCH_WRK2_STRM'))
 			if quarter_select.first_selected_option.text != 'Spring 2017':
 				quarter_select.select_by_value('2174')
-			driver.save_screenshot('screen.png')
+			# driver.save_screenshot('screen.png')
 			driver.implicitly_wait(20)
 			print('driver ready')
 			return driver
@@ -72,7 +70,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		wait = WebDriverWait(driver, 10)
 		wait.until(EC.visibility_of(test))
 
-		driver.save_screenshot('screen2.png')
+		# driver.save_screenshot('screen2.png')
 
 		coursekey = driver.find_element_by_id('win0divUC_CLS_DTL_WRK_HTMLAREA$0')
 		coursekey = coursekey.text.split()
@@ -103,21 +101,28 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		courses_dict[courseid]['description'] = coursedscp
 		courses_dict[courseid]['condition'] = coursecondition
 
-		if coursecondition == 'Open':
-			sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
-			if len(sub) != 0:
-				courses_dict[courseid]['subsections'] = list()
-				subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
-				for i in range(subcounts):
-					courses_dict[courseid]['subsections'].append(dict())
-					subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
-					subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
-					subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
-					courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
-					courses_dict[courseid]['subsections'][i]['instructor'] = subinstructor
-					courses_dict[courseid]['subsections'][i]['daytime'] = subtime
-			else:
-				courses_dict[courseid]['subsections'] = []
+		
+		dothething = True
+		while dothething:
+			try:
+				sub = driver.find_element_by_id('win0divUC_CLS_REL_WRK_RELATE_CLASS_NBR_1$373$$0').text
+				break
+			except NoSuchElementException:
+				sub = ''
+				dothething = False
+				
+		if len(sub) != 0:
+			courses_dict[courseid]['subsections'] = list()
+			subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
+			for i in range(subcounts):
+				courses_dict[courseid]['subsections'].append(dict())
+				subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
+				subinstructor = driver.find_element_by_id('win0divDISC_INSTR$' + str(i)).text
+				subtime = driver.find_element_by_id('DISC_SCHED$' + str(i)).text
+				courses_dict[courseid]['subsections'][i]['sectionname'] = subkey
+				courses_dict[courseid]['subsections'][i]['instructor'] = subinstructor
+				courses_dict[courseid]['subsections'][i]['daytime'] = subtime
+			
 		else:
 			courses_dict[courseid]['subsections'] = []
 
@@ -142,16 +147,15 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	searchbutton.click()
 
-	# test = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	waittime = 10
 	
 	while waittime < 120:
 		try:
 			wait = WebDriverWait(driver, waittime)
 			wait.until(EC.staleness_of(searchbutton))
-			driver.save_screenshot('screen1.png')
+			# driver.save_screenshot('screen1.png')
 			break
-			# wait.until(EC.staleness_of(test))
+			
 		except TimeoutException:
 			waittime += 10
 			continue
@@ -194,7 +198,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 
 			wait = WebDriverWait(driver, 10)
 			wait.until(EC.staleness_of(pagedown))
-			driver.save_screenshot('screen3.png')
+			# driver.save_screenshot('screen3.png')
 			print('page ' + str(pages) + ' (reversely) finished')
 			pages = pages - 1
 
@@ -203,7 +207,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 			print('this is dept: ' + dept + ', it only has one page or this is its last page')
 			results_one_page = resultsize % 25
 			courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
-			driver.save_screenshot('screen3.png')
+			# driver.save_screenshot('screen3.png')
 			print('this page finished')
 		
 		driver.quit()
@@ -220,9 +224,11 @@ def course_crawler(dept_ls, courses_dict, course_url):
 				courses_dict, timeoutdept_ls = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
 				break
 			except StaleElementReferenceException:
+				print('StaleElementRefernceException')
 				dothething += 1
 				continue
 			except NoSuchElementException:
+				print('NoSuchElementException')
 				dothething += 1
 				continue
 		if dothething >= 5:
@@ -248,12 +254,13 @@ if __name__ == "__main__":
 	# print(courses_dict)
 	print(timeoutdept_ls)
 
-	with open('course_output.json', 'w') as f:
+	with open('course_output111.json', 'w') as f:
 		json.dump(courses_dict, f, ensure_ascii = False)
 
 	coursedf = pd.DataFrame.from_dict(courses_dict, orient = 'index')
+	coursedf.sort_index(axis=1, inplace = True)
 
-	coursedf.to_csv('course_output.csv', sep = '|')
+	coursedf.to_csv('course_output111.csv', sep = '|')
 
 	
 
