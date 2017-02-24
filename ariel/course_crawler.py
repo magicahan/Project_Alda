@@ -254,13 +254,13 @@ if __name__ == "__main__":
 	# print(courses_dict)
 	print(timeoutdept_ls)
 
-	with open('course_output111.json', 'w') as f:
+	with open('course_output.json', 'w') as f:
 		json.dump(courses_dict, f, ensure_ascii = False)
 
 	coursedf = pd.DataFrame.from_dict(courses_dict, orient = 'index')
 	coursedf.sort_index(axis=1, inplace = True)
 
-	coursedf.to_csv('course_output111.csv', sep = '|')
+	coursedf.to_csv('course_output.csv', sep = '|')
 
 	
 
