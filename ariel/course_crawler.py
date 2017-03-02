@@ -47,18 +47,18 @@ def setup_driver(course_url):
 			continue
 
 
-def find_dept_ls(course_url):
-	driver = setup_driver(course_url)
+# def find_dept_ls(course_url):
+# 	driver = setup_driver(course_url)
 
-	dept_btn_id = 'UC_CLSRCH_WRK2_SUBJECT'
-	dept_btn = driver.find_element_by_id(dept_btn_id)
-	dept_select = Select(dept_btn)
-	depts = dept_select.options
-	dept_ls = []
-	for i in depts[1:]:
-		dept_ls.append(i.get_attribute('value'))
-	driver.quit()
-	return dept_ls
+# 	dept_btn_id = 'UC_CLSRCH_WRK2_SUBJECT'
+# 	dept_btn = driver.find_element_by_id(dept_btn_id)
+# 	dept_select = Select(dept_btn)
+# 	depts = dept_select.options
+# 	dept_ls = []
+# 	for i in depts[1:]:
+# 		dept_ls.append(i.get_attribute('value'))
+# 	driver.quit()
+# 	return dept_ls
 
 
 def one_page_crawler(results_one_page, driver, courses_dict):
@@ -245,12 +245,12 @@ if __name__ == "__main__":
 	course_url = 'https://coursesearch.uchicago.edu/psc/prdguest/EMPLOYEE/HRMS/c/UC_STUDENT_RECORDS_FL.UC_CLASS_SEARCH_FL.GBL'
 	courses_dict = dict()
 
-	dept_ls = find_dept_ls(course_url)
+	#dept_ls = find_dept_ls(course_url)
+	with open('dept_ls.json') as f:
+		dept_ls = json.load(f)
+	
 	print('There are {:} departments in total.'.format(len(dept_ls)))
 	
-	# dept_ls = dept_ls[:1]
-	# dept_ls = dept_ls[:5]
-
 	courses_dict, timeoutdept_ls = course_crawler(dept_ls, courses_dict, course_url)	
 	# print(courses_dict)
 	print(timeoutdept_ls)
