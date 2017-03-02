@@ -113,7 +113,8 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 				
 		if len(sub) != 0:
 			courses_dict[courseid]['subsections'] = list()
-			subcounts = len(driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0"))
+			table = driver.find_elements_by_id("win0divSSR_CLS_TBL_R11$grid$0")[0]
+			subcounts = len(table.find_elements_by_class_name('ps_grid-row'))
 			for i in range(subcounts):
 				courses_dict[courseid]['subsections'].append(dict())
 				subkey = driver.find_element_by_id('win0divDISC_HTM$' + str(i)).text
