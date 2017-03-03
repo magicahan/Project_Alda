@@ -142,7 +142,16 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 	driver = setup_driver(course_url)
 
 	dept_btn = driver.find_element_by_id('UC_CLSRCH_WRK2_SUBJECT')
-	Select(dept_btn).select_by_value(dept)
+	select_dept = Select(dept_btn)
+	dothething = True
+	while dothething:
+		select_dept.select_by_value(dept)
+		if select_dept.first_selected_option.get_attribute('value') == dept:
+			print('True, go on')
+			break
+		else:
+			continue
+
 	driver.implicitly_wait(10)
 
 	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
