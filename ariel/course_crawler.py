@@ -152,7 +152,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 		else:
 			continue
 
-	driver.implicitly_wait(10)
+	#driver.implicitly_wait(10)
 
 	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	searchbutton.click()
