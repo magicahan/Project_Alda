@@ -34,7 +34,7 @@ def setup_driver(course_url):
 			quarter_select = Select(driver.find_element_by_id('UC_CLSRCH_WRK2_STRM'))
 			if quarter_select.first_selected_option.text != 'Spring 2017':
 				quarter_select.select_by_value('2174')
-			# driver.save_screenshot('screen.png')
+			driver.save_screenshot('screen.png')
 			driver.implicitly_wait(20)
 			print('driver ready')
 			return driver
@@ -70,7 +70,7 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		wait = WebDriverWait(driver, 10)
 		wait.until(EC.visibility_of(test))
 
-		# driver.save_screenshot('screen2.png')
+		driver.save_screenshot('screen2.png')
 
 		coursekey = driver.find_element_by_id('win0divUC_CLS_DTL_WRK_HTMLAREA$0')
 		coursekey = coursekey.text.split()
@@ -163,7 +163,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 		try:
 			wait = WebDriverWait(driver, waittime)
 			wait.until(EC.staleness_of(searchbutton))
-			# driver.save_screenshot('screen1.png')
+			driver.save_screenshot('screen1.png')
 			break
 			
 		except TimeoutException:
@@ -208,7 +208,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 
 			wait = WebDriverWait(driver, 10)
 			wait.until(EC.staleness_of(pagedown))
-			# driver.save_screenshot('screen3.png')
+			driver.save_screenshot('screen3.png')
 			print('page ' + str(pages) + ' (reversely) finished')
 			pages = pages - 1
 
@@ -217,7 +217,7 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 			print('this is dept: ' + dept + ', it only has one page or this is its last page')
 			results_one_page = resultsize % 25
 			courses_dict = one_page_crawler(results_one_page, driver, courses_dict)
-			# driver.save_screenshot('screen3.png')
+			driver.save_screenshot('screen3.png')
 			print('this page finished')
 		
 		driver.quit()
