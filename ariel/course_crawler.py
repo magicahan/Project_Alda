@@ -83,13 +83,15 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 		loc = driver.find_element_by_id('MTG_LOC$0').text
 		career = driver.find_element_by_id('PSXLATITEM_XLATLONGNAME$33$$0').text
 		
-		courseid = coursekey[0] + coursekey[1][:5]
+		coursenumber = coursekey[0] + coursekey[1][:5]
 		section = coursekey[1][6:]
 		sectionid = coursekey[2]
 		coursetype = coursekey[4]
 		coursecondition = coursekey[-1]
+		courseid = coursenumber+section+sectionid
 		
 		courses_dict[courseid] = dict()
+		courses_dict[courseid]['coursenumber'] = coursenumber
 		courses_dict[courseid]['name'] = coursename
 		courses_dict[courseid]['section'] = section
 		courses_dict[courseid]['sectionid'] = sectionid
