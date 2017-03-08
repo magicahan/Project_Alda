@@ -1,14 +1,15 @@
 CREATE TABLE courses
-   (coursenumber VARCHAR(10),
-   career VARCHAR(50),
+   (courseid VARCHAR(30),
+   coursenumber VARCHAR(15),
+   career VARCHAR(30),
    condition VARCHAR(10),
    daytime VARCHAR(50),
-   description VARCHAR(1000),
-   instructor VARCHAR(30),
-   location VARCHAR(100),
-   name VARCHAR(30),
-   section VARCHAR(10),
+   description VARCHAR(5000),
+   instructor VARCHAR(100),
+   location VARCHAR(50),
+   name VARCHAR(100),
+   section VARCHAR(5),
    sectionid VARCHAR(10),
-   subsections VARCHAR(100),
-   type VARCHAR(10));
-.import course_output_sql.csv courses
+   subsections VARCHAR(5000),
+   coursetype VARCHAR(5));
+.import course_output.csv courses
