@@ -4,19 +4,24 @@ from django.urls import reverse
 from django.template import loader
 from django.views import generic
 from django import forms
+import django_tables2 as tables
 import traceback
 import sys
 
-from .models import Question, Choice
+from .models import Course
 from .find_courses import find_courses
 
 COLUMN_NAMES = dict(
-        course_num='Course',
+        Select='Select',
+        courseid='Courseid',
+        coursenumber='Course',
+        name='Name',
         career='Undergrad/Grad',
         condition='Open/Closed',
         daytime='Day/Time',
         description='Course Description',
-        instructor='Instructor Name',
+        instructor='Instructor Name(s)',
+        location='Location',
         section='Section',
         sectionid='Sectionid',
         subsections='Labs/Discussions',
@@ -28,6 +33,10 @@ class CourseSearch(forms.Form):
     course1 = forms.CharField(label = 'Desired Course 1', max_length = 15, help_text = 'e.g. CMSC12300')
     course2 = forms.CharField(label = 'Desired Course 2', max_length = 15, help_text = 'e.g. MATH20300')
     course3 = forms.CharField(label = 'Desired Course 3', max_length = 15, help_text = 'e.g. ECON20000')
+
+
+class CourseSelect(forms.Form):
+    Select = forms.BooleanField(label = 'Select', required = False)
 
 def index(request):
     context = {}
@@ -68,10 +77,7 @@ def index(request):
         context['err'] = res
         result = None
         cols = None
-    # elif not _valid_result(res):
-    #     context['result'] = None
-    #     context['err'] = ('Return of find_courses has the wrong data type. '
-    #                      'Should be a tuple of length 4 with one string and three lists.')
+
     else:
         columns, result = res
 
@@ -79,11 +85,20 @@ def index(request):
         if result and isinstance(result[0], str):
             result = [(r,) for r in result]
 
+        # result1 = []
+        # for res in result:
+        #     selectchoice = CourseSelect(request.POST)
+        #     res = (selectchoice,) + res
+        #     result1.append(res)
+        columns.insert(0, 'Select')
+        # columns.insert(0, '')
         context['result'] = result
         context['num_results'] = len(result)
         context['columns'] = [COLUMN_NAMES.get(col, col) for col in columns]
 
     context['form'] = form
+    selected = request.POST.getlist('checks')
+    context['selected'] = selected
 
     return render(request, 'courses/index.html', context)
 

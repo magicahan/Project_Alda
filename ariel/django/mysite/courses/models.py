@@ -4,19 +4,20 @@ from django.utils import timezone
 #from django.utils.encoding import python_2_unicode_compatible
 
 class Course(models.Model):
+	courseid = models.CharField(max_length=30, primary_key = True)
 	coursenumber = models.CharField(max_length = 15)
+	section = models.CharField(max_length = 5, blank = True)
+	name = models.CharField(max_length = 100, blank = True)
 	career = models.CharField(max_length = 30)
 	condition = models.CharField(max_length = 10)
 	daytime = models.CharField(max_length = 50, blank = True)
-	description = models.CharField(max_length = 5000, blank = True)
+	# description = models.CharField(max_length = 5000, blank = True)
 	instructor = models.CharField(max_length = 100, blank = True)
 	location = models.CharField(max_length = 50, blank = True)
-	name = models.CharField(max_length = 100, blank = True)
-	section = models.CharField(max_length = 5, blank = True)
-	sectionid = models.CharField(max_length = 10, blank = True)
-	subsections = models.CharField(max_length = 5000, blank = True)
 	coursetype = models.CharField(max_length = 5, blank = True)
-
+	# sectionid = models.CharField(max_length = 10, blank = True)
+	# subsections = models.CharField(max_length = 5000, blank = True)
+	
 	def __str__(self):
 		return str(self.coursenumber)
 

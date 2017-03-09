@@ -1,8 +1,8 @@
 CREATE TABLE courses
    (courseid VARCHAR(30),
-   coursenumber VARCHAR(15),
    career VARCHAR(30),
    condition VARCHAR(10),
+   coursenumber VARCHAR(15),
    daytime VARCHAR(50),
    description VARCHAR(5000),
    instructor VARCHAR(100),

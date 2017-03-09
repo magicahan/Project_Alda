@@ -21,7 +21,9 @@ def find_courses(args_from_ui):
 		for key, value in args_from_ui.items():
 			coursels.append(value)
 
-		query = 'SELECT * FROM courses WHERE coursenumber = ? or coursenumber = ? or coursenumber = ?'
+		query = 'SELECT coursenumber, section, name, career, condition, '+\
+		'daytime, instructor, location, coursetype FROM'+\
+		' courses WHERE coursenumber = ? or coursenumber = ? or coursenumber = ?'
 		args = tuple(coursels)
 
 		r = c.execute(query, args)
