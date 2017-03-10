@@ -7,7 +7,7 @@ The University of Chicago | Winter 2017
 ## About this repository
 This repository contains the final course project for CAPP 30122. 
 
-## About all subdirectories
+## About this subdirectories
 This repository contains two python scripts and a schedule template file.
 
 * <code>decision.py</code>: this python script would use all functions created 
