@@ -13,6 +13,8 @@ from django.db.models import Q
 from .models import Course, Chooseins, Testinstructor
 from .find_courses import find_courses
 from .enroll_crawler import *
+from .decision import *
+from .builder import *
 
 class CourseSearch(forms.Form):
     course1 = forms.CharField(label = 'Desired Course 1', max_length = 15, help_text = 'e.g. CMSC12300')
@@ -66,12 +68,11 @@ def index(request):
             coursetime = input.daytime
             inputls = [coursenum, coursename, courseloc, coursetime]
             coursels.append(inputls)
-        context['form2'] = coursels
-        # dpoutput = dpfunction(coursels)
-        # if dpoutput > 0:
-        #     context['form2'] = "Your course schedules have already been downloaded into folder."
-        # else:
-        #     context['form2'] = "There's conflict in your course selection. We couldn't generate schedule."
+        dpoutput = create_schedules(coursels)
+        if dpoutput > 0:
+            context['form2'] = "Your course schedules have already been downloaded into folder."
+        else:
+            context['form2'] = "There's conflict in your course selection. We couldn't generate schedule."
     elif request.method == 'POST' and "emailbtn" in request.POST:
         for i in range(1, 21):
             if 'course' + str(i) in request.POST:
