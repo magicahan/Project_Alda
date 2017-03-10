@@ -61,10 +61,8 @@ def clean_conflicts(course_list):
                 if combo not in conflicts:
                     conflicts.append(combo)
     
-    if conflicts != []:
-        for element in conflicts:
-            return combos.remove(element)
-    else:
+    for element in conflicts:
+        combos.remove(element)
         return combos
 
 
