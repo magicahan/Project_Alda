@@ -60,9 +60,9 @@ def clean_conflicts(course_list):
             if start3 < start2 < end3 or start3 < end2 < end3:
                 if combo not in conflicts:
                     conflicts.append(combo)
-    
-    for element in conflicts:
-        combos.remove(element)
+    if len(set(conflicts)) > 0:
+        for element in list(set(conflicts)):
+            combos.remove(element)
     return combos
 
 
