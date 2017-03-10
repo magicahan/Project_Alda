@@ -13,6 +13,8 @@ from django.db.models import Q
 from .models import Course, Chooseins, Testinstructor
 from .find_courses import find_courses
 from .enroll_crawler import *
+from .decision import *
+from .builder import *
 
 class CourseSearch(forms.Form):
     course1 = forms.CharField(label = 'Desired Course 1', max_length = 15, help_text = 'e.g. CMSC12300')
@@ -23,7 +25,8 @@ class CourseSearch(forms.Form):
 class EmailAdd(forms.Form):
     emailadd = forms.CharField(
         label = 'Please type in your uchicago.edu email address to get email address', 
-        max_length = 100, help_text = 'e.g. nyxu@uchicago.edu')
+        max_length = 100, help_text = 'e.g. nyxu@uchicago.edu',
+        initial = 'xxx@uchicago.edu')
 
 def index(request):
     context = {}
@@ -66,12 +69,12 @@ def index(request):
             coursetime = input.daytime
             inputls = [coursenum, coursename, courseloc, coursetime]
             coursels.append(inputls)
-        context['form2'] = coursels
-        # dpoutput = dpfunction(coursels)
-        # if dpoutput > 0:
-        #     context['form2'] = "Your course schedules have already been downloaded into folder."
-        # else:
-        #     context['form2'] = "There's conflict in your course selection. We couldn't generate schedule."
+        dpoutput = create_schedules(coursels)
+        context['form3'] = None
+        if dpoutput > 0:
+            context['form2'] = "Your course schedules have already been downloaded into folder."
+        else:
+            context['form2'] = "There's conflict in your course selection. We couldn't generate schedule."
     elif request.method == 'POST' and "emailbtn" in request.POST:
         for i in range(1, 21):
             if 'course' + str(i) in request.POST:
