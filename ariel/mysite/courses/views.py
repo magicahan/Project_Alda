@@ -25,7 +25,8 @@ class CourseSearch(forms.Form):
 class EmailAdd(forms.Form):
     emailadd = forms.CharField(
         label = 'Please type in your uchicago.edu email address to get email address', 
-        max_length = 100, help_text = 'e.g. nyxu@uchicago.edu')
+        max_length = 100, help_text = 'e.g. nyxu@uchicago.edu',
+        initial = 'xxx@uchicago.edu')
 
 def index(request):
     context = {}
@@ -69,6 +70,7 @@ def index(request):
             inputls = [coursenum, coursename, courseloc, coursetime]
             coursels.append(inputls)
         dpoutput = create_schedules(coursels)
+        context['form3'] = None
         if dpoutput > 0:
             context['form2'] = "Your course schedules have already been downloaded into folder."
         else:
