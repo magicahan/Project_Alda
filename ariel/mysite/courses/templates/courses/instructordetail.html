@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Instructor Evaluation</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'courses/style.css' %}" />
+    </head>
+    <body>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <div id="header">
+            <h1>{{ course.name }}</h1>
+        </div>
+        
+        <div class="frame">
+            <table class="courses">
+                <tr>
+                    <th>Course</th>
+                    <th>Section</th>
+                    <th>Name</th>
+                    <th>Undergrad/Grad</th>
+                    <th>Open/Closed</th>
+                    <th>Day/Time</th>
+                    <th>Instructor Name(s)</th>
+                    <th>Location</th>
+                    <th>LEC/SEM</th>
+                </tr>
+                <tr>
+                    <th>{{ course.coursenumber }}</th>
+                    <th>{{ course.section }}</th>
+	                <th>{{ course.name }}</th>
+	                <th>{{ course.career }}</th>
+	                <th>{{ course.condition }}</th>
+	                <th>{{ course.daytime }}</th>
+	                <th><a href="">{{ course.instructor }}</a></th>
+	                <th>{{ course.location }}</th>
+	                <th>{{ course.coursetype }}</th>
+                </tr>
+            </table>
+
+            <table class="courses", id='des'>
+            	<tr>
+            		<th>Course Description</th>
+            		<th style="font-size: 16px; font-family: Palatino Linotype;">{{ course.description }}</th>
+            	</tr>
+            	<tr>
+            		<th>Labs/Discussions</th>
+            		<th>{{ course.subsections }}</th>
+            	</tr>
+            </table>
+            </div>
+        </div>
+
+    </body>
+</html>
