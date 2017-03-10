@@ -1,0 +1,64 @@
+CREATE TABLE course
+	(course_num varchar(50),
+	course_id int,
+	course_title varchar(100),
+	dept varchar(50),
+	primary key (course_id)
+)
+.import course_table.csv course
+
+CREATE TABLE instructor
+	(last_name varchar(50),
+	first_name varchar(50),
+	instructor_id int,
+	dept varchar(50),
+	primary key (instructor_id)
+)
+.import instructor_table.csv instructor
+
+CREATE TABLE ins_class
+	(instructor_id int,
+	course_id int,
+	year int,
+	class_section int,
+	quarter int,
+	primary key (instructor_id, course_id, year, class_section, quarter)
+)
+.import link_table.csv ins_class
+
+CREATE TABLE ins_score_detail
+	(course_id int,
+	year int,
+	class_section int,
+	quarter int,
+	instructor_id int,
+	score_term varchar(100),
+	avg_score int,
+	primary key (instructor_id, course_id, year, class_section, quarter)
+)
+.import instructor_avgscore.csv ins_score_detail
+DELETE FROM ins_score_detail WHERE ISNUMERIC(avg_score) = 0
+
+CREATE TABLE ins_avgscore
+	(course_id int,
+	year int,
+	class_section int,
+	quarter int,
+	instructor_id int,
+	score_term varchar(100),
+	avg_score int,
+	primary key (instructor_id, course_id, year, class_section, quarter)
+)
+.import instructor_score.csv ins_avgscore
+DELETE FROM ins_avgscore WHERE ISNUMERIC(avg_score) = 0
+
+CREATE TABLE ins_comment
+	(course_id int, 
+	year int,
+	class_section int, 
+	quarter int, 
+	instructor_id int, 
+	comments varchar(10000)
+	primary key (instructor_id, course_id, year, class_section, quarter)
+)
+.import instructor_comments.csv ins_comment
