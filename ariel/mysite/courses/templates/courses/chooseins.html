@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Instructor Evaluation</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'courses/style.css' %}" />
+    </head>
+    <body>
+        {% if err %}<p><strong>{{ err }}</strong></p>{% endif %}
+        {% if not result %}
+        <div id="header">
+            <h1>Please choose one instructor from below: </h1>
+        </div>
+        <form method="post">
+        {% csrf_token %}
+        <div class="frame">
+            <table class="courses">
+                <tr>
+                    {% if chooseins.ins1 %}
+                    <th><input type="checkbox" name="chooseins.ins1" id="chooseins.ins1" value="{{ chooseins.ins1 }}"/></th>
+                    <th>{{ chooseins.ins1 }}</th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    {% if chooseins.ins2 %}
+                    <th><input type="checkbox" name="chooseins.ins2" id="chooseins.ins2" value="{{ chooseins.ins2 }}"/></th>
+                    <th>{{ chooseins.ins2 }}</th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    {% if chooseins.ins3 %}
+                    <th><input type="checkbox" name="chooseins.ins3" id="chooseins.ins3" value="{{ chooseins.ins3 }}"/></th>
+                    <th>{{ chooseins.ins3 }}</th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    {% if chooseins.ins4 %}
+                    <th><input type="checkbox" name="chooseins.ins4" id="chooseins.ins4" value="{{ chooseins.ins4 }}"/></th>
+                    <th>{{ chooseins.ins4 }}</th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    {% if chooseins.ins5 %}
+                    <th><input type="checkbox" name="chooseins.ins5" id="chooseins.ins5" value="{{ chooseins.ins5 }}"/></th>
+                    <th>{{ chooseins.ins5 }}</th>
+                    {% endif %}
+                </tr>
+            </table>
+            <input type="submit" value="Instructor Evaluation" name="evalbtn"/>
+        </div>
+        {% endif %}
+        {% if result %}
+        <div id="header">
+            <h1>Instructor's Evaluation</h1>
+        </div>
+        <div class="frame">
+        {% for instructor in result %}
+        <table class="courses">
+            <tr>
+                <th>Instructor's First Name</th>
+                <th>Instructor's Last Name</th>
+                <th>Department</th>
+                <th>Number of Response</th>
+            </tr>
+            <tr>
+                <th>{{ instructor.fname }}</th>
+                <th>{{ instructor.lname }}</th>
+                <th>{{ instructor.dept }}</th>
+                <th>{{ instructor.num_response }}</th>
+            </tr>
+            <tr><th>Instructor's Top 6 Positive Comments</th></tr>
+            <tr>
+                <th>{{ instructor.pos1 }}</th>
+                <th>{{ instructor.pos2 }}</th>
+                <th>{{ instructor.pos3 }}</th>
+                <th>{{ instructor.pos4 }}</th>
+                <th>{{ instructor.pos5 }}</th>
+                <th>{{ instructor.pos6 }}</th>
+            </tr>
+            <tr><th>Instructor's Top 6 Negative Comments</th></tr>
+                <th>{{ instructor.neg1 }}</th>
+                <th>{{ instructor.neg2 }}</th>
+                <th>{{ instructor.neg3 }}</th>
+                <th>{{ instructor.neg4 }}</th>
+                <th>{{ instructor.neg5 }}</th>
+                <th>{{ instructor.neg6 }}</th>
+            </tr>
+            <tr>
+                <th>Instructor's Average Score</th>
+                <th>{{ instructor.avg_score }}</th>
+            </tr>
+        </table>
+        {% endfor %}
+        </div>
+        {% endif %}
+        {% if message %}
+        <table class="courses">
+        <tr>
+            <th> </th>
+            <th>{{ message }}</th>
+            <th> </th>
+        </tr>
+        </table>
+        {% endif %}
+    </body>
+</html>
+
