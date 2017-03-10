@@ -63,7 +63,7 @@ def clean_conflicts(course_list):
     
     for element in conflicts:
         combos.remove(element)
-        return combos
+    return combos
 
 
 def create_schedules(example_list):
