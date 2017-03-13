@@ -1,38 +1,33 @@
+'''
+---------------------------------------------------------------------------
+CAPP 30122: AldaCourse
+Contributor: Dongping Zhang
+Python Version: 3.5
+Seed: None
+
+This is a Python script for CAPP 30122 for the final project named AldaCourse. 
+builder.py is a utility script used to build the schedules using the list
+of courses users input.
+---------------------------------------------------------------------------
+The current script defines the following functions:
+    * time_calculator()
+    * course_info()
+    * merger_pattern() 
+    * write_schedule()
+    * builder() 
+---------------------------------------------------------------------------
+'''
 import openpyxl
 from openpyxl import load_workbook
 import re
 import numpy as np
 
-
-example1 = ['MACS30200', \
-            'Perspectives on Advanced Computational Topics', \
-            'Saieh Hall for Economics 247', \
-            'Mon Wed : 11:30 AM-12:50 PM']
-example2 = ['MATH20300', \
-            'Analysis In Rn-1',\
-            'Eckhart Hall 202',\
-            'Mon Wed Fri : 12:30 PM-01:20 PM']
-example3 = ['MPCS58020', \
-            'Time Series Analysis and Stochastic Processes', \
-            'TBA', \
-            'Mon : 05:30 PM-08:30 PM']
-example4 = ['LAWS90213', \
-            'Mental Health Advocacy Clinic', \
-            'Laird Bell Quadrangle B', \
-            'Thu : 04:00 PM-06:00 PM']
-
-wb =load_workbook(filename = 'template.xlsx')
-template = wb.active
-
-# for i in range(3, 63):
-#    index = 'A' + str(i)
-#    print(template[index].value)
-
 def time_calculator(time):
     '''
-    function converts time, for example: 13:30 to 13.5
+    This function is used to convert time data to appropriate and suitable
+    time format
+        for example: 13:30 to 13.5
     '''
-
     hours = int(time)
     hours_decimal = round(time - int(time), 1)
     mins = hours_decimal * 100 / 60
@@ -43,8 +38,11 @@ def time_calculator(time):
 # get the number of cells spans of that particular course
 def course_info(time):
     '''
-    input: time = '12:30 PM-01:00 PM'
-    return: (12.5, 13.0, 1.0, 1)
+    This function is to convert course information to desired data structure
+    for example:
+        input: time = 'Mon Wed: 12:30 PM-01:00 PM'
+            return: ('Mon Wed', 12.5, 13.0, 50.0, 6) which is 
+                    (days, start time, end time, num of mins, number of 15mins)
     '''
     span_nums_str = re.findall('\d+', time)
     end_time = float(span_nums_str[-2] + '.' + span_nums_str[-1])
@@ -76,71 +74,12 @@ def course_info(time):
     return days, start_time, end_time, num_mins, num_cells
 
 
-
 # get a list of all time slots
-# ['A3',
-#  'A5',
-#  'A7',
-#  'A9',
-#  'A11',
-#  'A13',
-#  'A15',
-#  'A17',
-#  'A19',
-#  'A21',
-#  'A23',
-#  'A25',
-#  'A27',
-#  'A29',
-#  'A31',
-#  'A33',
-#  'A35',
-#  'A37',
-#  'A39',
-#  'A41',
-#  'A43',
-#  'A45',
-#  'A47',
-#  'A49',
-#  'A51',
-#  'A53',
-#  'A55',
-#  'A57',
-#  'A59']
 time_cells = []
 for index in range(3, 60, 2):
     time_cells.append('A' + str(index))
 
-# get a list of all possible time slots
-# ['07:00 AM-07:30 AM ',
-#  '07:30 AM-08:00 AM',
-#  '08:00 AM-08:30 AM ',
-#  '08:30 AM-09:00 AM',
-#  '09:00 AM-09:30 AM',
-#  '09:30 AM-10:00 AM',
-#  '10:00 AM-10:30 AM ',
-#  '10:30 AM-11:00 AM',
-#  '11:00 AM-11:30 AM',
-#  '11:30 AM-12:00 PM',
-#  '12:00 PM-12:30 PM ',
-#  '12:30 PM-01:00 PM',
-#  '01:00 PM-01:30 PM ',
-#  '01:30 PM-02:00 PM',
-#  '02:00 PM-02:30 PM ',
-#  '02:30 PM-03:00 PM',
-#  '03:00 PM-03:30 PM ',
-#  '03:30 PM-04:00 PM',
-#  '04:00 PM-04:30 PM ',
-#  '04:30 PM-05:00 PM',
-#  '05:00 PM-05:30 PM ',
-#  '05:30 PM-06:00 PM',
-#  '06:00 PM-06:30 PM ',
-#  '06:30 PM-07:00 PM',
-#  '07:00 PM-07:30 PM ',
-#  '07:30 PM-08:00 PM',
-#  '08:00 PM-08:30 PM ',
-#  '08:30 PM-09:00 PM',
-#  '09:00 PM-10:00 PM ']
+# get a list of time slots corresponding the the number of cells
 time_slots = []
 for cells in time_cells:
     time_slots.append(template[cells].value)
@@ -148,6 +87,7 @@ for cells in time_cells:
 ################### Matching days to columns ###################
 days_map = {'Mon':'B', 'Tue':'C', 'Wed':'D', \
             'Thu':'E', 'Fri':'F', 'Sat':'G', 'Sun':'H'}
+
 
 ################## Matching times to rows ###################
 slots_map = {}
@@ -158,6 +98,11 @@ for slots, index in zip(time_slots, range(3, 60, 2)):
 
 
 def merger_pattern(days, start_time, num_cells):
+    '''
+    This function takes in the days and the start_time of a course, and it 
+    would figure out the location and the number of excel cells that particular
+    course would occupy in the spreadsheet
+    '''
     cols = []
     for day in days:
         cols.append(days_map[day])
@@ -171,12 +116,15 @@ def merger_pattern(days, start_time, num_cells):
         starting_cells.append(col+str(starting_row))
         merge_patterns.append(col+str(starting_row)\
                                 +':'+col+str(ending_row))
-
     return starting_cells, merge_patterns
 
 
 def write_schedule(template, starting_cells,\
                     merge_patterns, course):
+    '''
+    This function is used to write the actual course information to the 
+    spreadsheet template
+    '''
     ccn, name, loc, time = course
     days, start_time, end_time, num_mins, \
             num_cells = course_info(time)
@@ -187,8 +135,11 @@ def write_schedule(template, starting_cells,\
         template[start] = content
 
 
-
 def builder(course_list, file_name):
+    '''
+    This function is used to build the course schedules using all auxiliary
+    function composed above
+    '''
     wb =load_workbook(filename = 'template.xlsx')
     template = wb.active
 

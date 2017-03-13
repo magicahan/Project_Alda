@@ -1,4 +1,21 @@
-from builder import *
+'''
+---------------------------------------------------------------------------
+CAPP 30122: AldaCourse
+Contributor: Dongping Zhang
+Python Version: 3.5
+Seed: None
+
+This is a Python script for CAPP 30122 for the final project named AldaCourse. 
+decision.py is a the script used to build the actual schedules using the 
+utility script called builder.py in the same direcctory
+---------------------------------------------------------------------------
+The current script defines the following functions:
+    * combinations()
+    * clean_conflicts()
+    * create_schedule()
+---------------------------------------------------------------------------
+'''
+from .builder import *
 import itertools
 
 # this python script is used to determine:
@@ -67,6 +84,10 @@ def clean_conflicts(course_list):
 
 
 def create_schedules(example_list):
+    '''
+    THis function takes a list of courses and would generate all feasible 
+    schedules in spreadsheet (xlms) format
+    '''
     combos = clean_conflicts(example_list)
 
     file_names = []
