@@ -1,6 +1,7 @@
 '''
 ---------------------------------------------------------------------------
 CAPP 30122: AldaCourse
+Contributor: Dongping Zhang
 Python Version: 3.5
 Seed: None
 

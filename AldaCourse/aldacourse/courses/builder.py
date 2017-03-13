@@ -1,6 +1,7 @@
 '''
 ---------------------------------------------------------------------------
 CAPP 30122: AldaCourse
+Contributor: Dongping Zhang
 Python Version: 3.5
 Seed: None
 
@@ -21,13 +22,10 @@ from openpyxl import load_workbook
 import re
 import numpy as np
 
-wb =load_workbook(filename = 'template.xlsx')
-template = wb.active
-
-
 def time_calculator(time):
     '''
-    This function is used to convert time format
+    This function is used to convert time data to appropriate and suitable
+    time format
         for example: 13:30 to 13.5
     '''
     hours = int(time)
@@ -41,8 +39,10 @@ def time_calculator(time):
 def course_info(time):
     '''
     This function is to convert course information to desired data structure
-    input: time = '12:30 PM-01:00 PM'
-    return: (12.5, 13.0, 1.0, 1)
+    for example:
+        input: time = 'Mon Wed: 12:30 PM-01:00 PM'
+            return: ('Mon Wed', 12.5, 13.0, 50.0, 6) which is 
+                    (days, start time, end time, num of mins, number of 15mins)
     '''
     span_nums_str = re.findall('\d+', time)
     end_time = float(span_nums_str[-2] + '.' + span_nums_str[-1])
@@ -101,7 +101,7 @@ def merger_pattern(days, start_time, num_cells):
     '''
     This function takes in the days and the start_time of a course, and it 
     would figure out the location and the number of excel cells that particular
-    course would occupy
+    course would occupy in the spreadsheet
     '''
     cols = []
     for day in days:
