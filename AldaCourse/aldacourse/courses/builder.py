@@ -22,7 +22,7 @@ from openpyxl import load_workbook
 import re
 import numpy as np
 
-# initialize workbook file
+# initialize and activate workbook file
 wb =load_workbook(filename = 'template.xlsx')
 template = wb.active
 
