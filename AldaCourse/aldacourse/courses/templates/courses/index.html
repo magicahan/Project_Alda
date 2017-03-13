@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Course Schedule Builder</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'courses/style.css' %}" />
+    </head>
+    <body>
+    	{% if form1 != None %}
+        <div id="header">
+            <h1>Course Search</h1>
+        </div>
+        <p>Please Insert 3 Different Courses.</p>
+        <div class="frame">
+            <form method="post">
+                {% csrf_token %}
+                <table class="form">
+                {{ form1.as_p }}
+                </table>
+                <input type="submit" value="search" name="searchbtn"/>
+            </form>
+        </div>
+        {% endif %}
+        {% if form2 != None %}
+        <div id="header">
+            <h1>Course Schedule</h1>
+        </div>
+        <div class="frame">
+            <table class="courses">
+                <tr>{{ form2 }}</tr>
+            </table>
+        </div>
+        {% endif %}
+        <div class="frame">
+        	{% if result != None %}
+        	<form method="post">
+	            {% csrf_token %}
+				<table class="courses">
+					<tr>
+						<th>Select</th>
+		                <th>Course</th>
+		                <th>Section</th>
+		                <th>Name</th>
+		                <th>Undergrad/Grad</th>
+		                <th>Open/Closed</th>
+		                <th>Day/Time</th>
+		                <th>Instructor Name(s)</th>
+		                <th>Location</th>
+		                <th>LEC/SEM</th>
+		            </tr>
+					{% for course in result %}
+				    <tr>
+				    	<th><input type="checkbox" name="course{{ forloop.counter }}" id="course{{ forloop.counter }}" value="{{ course.cid }}"/></th>
+		                <th><a href="{% url 'courses:detail' course.cid %}">{{ course.coursenumber }}</a></th>
+		                <th>{{ course.section }}</th>
+		                <th>{{ course.name }}</th>
+		                <th>{{ course.career }}</th>
+		                <th>{{ course.condition }}</th>
+		                <th>{{ course.daytime }}</th>
+		                <th><a href="{% url 'courses:chooseins' course.cid %}">{{ course.instructor }}</a></th>
+		                <th>{{ course.location }}</th>
+		                <th>{{ course.coursetype }}</th>
+		            </tr>
+					{% endfor %}
+				</table>
+				<table>
+					<tr>
+					<th>{{ form3 }}</th>
+					</tr>
+				</table>
+				<input type="submit" value="Download Schedules" name="schedulebtn"/>
+				<input type="submit" value="Get Notification" id="emailbtn" name="emailbtn"/>
+				</form>
+			{% endif %}
+		</div>
+		<div class="frame">
+		<a href="{% url 'courses:index' %}">Back to Course Search</a>
+		</div>
+    </body>
+</html>
