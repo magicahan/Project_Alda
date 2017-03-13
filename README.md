@@ -4,7 +4,7 @@ CAPP 30122: Computer Science with Applications-2
 
 The University of Chicago | Winter 2017
 
-## About this repository
+## About this repository:
 This repository contains the final course project for CAPP 30122. 
 
 ## About all sub-directories:
