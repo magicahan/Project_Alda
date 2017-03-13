@@ -4,6 +4,7 @@
 import nltk
 import sqlite3
 import re
+import json
 from nltk import *
 from nltk.tag import *
 from nltk.corpus import stopwords
@@ -12,7 +13,11 @@ from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import subjectivity
 from nltk.sentiment.util import *
 
+
 def find_insid():
+	'''
+	find unique instructor id in sql db.
+	'''
     db = sqlite3.connect('ins_comment.db')
     c = db.cursor()
     query = 'Select distinct instructor_id from ins_comments;'
@@ -24,6 +29,9 @@ def find_insid():
     return insid
 
 def find_comments(insid):
+	'''
+	find all comments by specific instructor id.
+	'''
     db = sqlite3.connect('ins_comment.db')
     c = db.cursor()
 
@@ -35,6 +43,8 @@ def find_comments(insid):
     for i in range(len(resultsls)):
         sentence = resultsls[i][0]
         sentences.append(sentence)
+
+    # clean up the sentences 
     resultsls = str(sentences)
     resultsls = resultsls.strip()
     resultsls = resultsls.replace("\\n","")
@@ -46,6 +56,10 @@ def find_comments(insid):
 
 
 def get_posneg_ls(ls, pos = True):
+	'''
+	given all comments list by instructor id, calculate sentiment score
+	and divide the all sentences into prositive or negative list. 
+	'''
     n_instances = 100
     subj_docs = [(sent, 'subj') for sent\
                  in subjectivity.sents(categories='subj')[:n_instances]]
@@ -85,15 +99,19 @@ def get_posneg_ls(ls, pos = True):
 
 
 def get_freq_ls(ls, n):
+	'''
+	given list of senteces, extract most comment n words.
+	'''
     stops = nltk.corpus.stopwords.words('english')
     resultsls = str(ls)
-    querywords = resultsls.lower().split()
+    querywords = word_tokenize(resultsls)
     resultwords  = [word for word in querywords if word not in stops]
     result = ' '.join(resultwords)
     tagged_sent = pos_tag(result.split())
+    # filter adjectives only
     adjectives = [word for word,pos in tagged_sent if pos == 'JJ' \
-             or pos =='JJR' or pos =='JJS' or pos =='RB' or pos =='RBR' \
-             or pos =='RBS' or pos =='JJ']
+                or pos =='JJR' or pos =='JJS' or word == "\\" or word == '\['
+                or word == '\]']
     freq_adj=nltk.FreqDist(adjectives)
     freq_adjls = freq_adj.most_common(n)
 
@@ -102,15 +120,18 @@ def get_freq_ls(ls, n):
         freq_final.append(freq_adjls[i][0])
     return freq_final
 
+
 def extract(n):
+	'''
+	combine all functions above and extract top n positive and negative words
+	by specific instructor id, and make in the form of dictionary of dictionary. 
+	'''
     insid = find_insid()
-    #print(insid)
     dict={}
     for iid in insid:
         print(iid)
         commentls = find_comments(iid)
-    #print(commentls)
-    #get positive
+        #get positive
         d = {}
         posls = get_posneg_ls(commentls, pos = True)
         pos_freqwords = get_freq_ls(posls, n)
