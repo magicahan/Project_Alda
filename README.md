@@ -20,7 +20,7 @@ course evalations.
 * <code>NLTK</code>: contains python scripts used to select the top 6 positive
  and negative words from each evaluation comments.
 
-* <code> ScheduleVisualization</code>: contains python scripts and 
+* <code>ScheduleVisualization</code>: contains python scripts and 
 template.xlms file used to create all possible combinations of non-conflict 
 courses schedules based on user input. 
 
@@ -28,13 +28,13 @@ courses schedules based on user input.
 the presentation slides.
 
 ## Contributors
-Alice Mee Seon Chung [Alicechung](https://github.com/Alicechung)
+**Alice Mee Seon Chung** [Alicechung](https://github.com/Alicechung)
 
-Luxi Luke Han [magicahan](https://github.com/magicahan)
+**Luxi Luke Han** [magicahan](https://github.com/magicahan)
 
-Dongping Gabriel Zhang [dpzhang](https://github.com/dpzhang)
+**Dongping Gabriel Zhang** [dpzhang](https://github.com/dpzhang)
 
-Ningyin Ariel Xu [sixisxu](https://github.com/sixisxu)
+**Ningyin Ariel Xu** [sixisxu](https://github.com/sixisxu)
 
 We would like to express our sincere gratitude to **Dr. Matthew Wachs** and 
 **Dr. Amitabh Chaudhary** for your teaching, guidance, and support throughout the
