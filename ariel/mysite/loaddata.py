@@ -1,4 +1,4 @@
-from courses.models import Course, Chooseins, Testinstructor
+from courses.models import Course, Chooseins, Instructor, InstructorCourse
 import json
 import csv
 import pandas as pd
@@ -32,28 +32,6 @@ def loaddatatoCourse(courses_dict):
 	return coursemodells
 
 
-def loaddatatoTest():
-	courseset = Course.objects.all()
-	for i in courseset:
-		ins = i.instructor
-		pk = i.cid
-		insls = ins.split(',')
-		ins_num = len(insls)
-		argls = [str() for i in range(5)]
-		for n in range(1, ins_num+1):
-			argls[n-1] = insls[n-1]
-		test = Testchoice(
-			testpk = pk,
-			ins1 = argls[0],
-			ins2 = argls[1],
-			ins3 = argls[2],
-			ins4 = argls[3],
-			ins5 = argls[4]
-			)
-		test.save()
-	return None
-
-
 def loaddatatoChooseins():
 	courseset = Course.objects.all()
 	for i in courseset:
@@ -76,8 +54,8 @@ def loaddatatoChooseins():
 	return None
 
 
-def loaddatatoInstructor():
-	with open('avg_score_ins', 'rb') as f:
+def loadInstructor():
+	with open('avg_score_ins_final', 'rb') as f:
 		avgscore_dict = pickle.load(f)
 	for key, value in avgscore_dict.items():
 		if len(value['pos']) < 6:
@@ -86,7 +64,7 @@ def loaddatatoInstructor():
 		if len(value['neg']) < 6:
 			for i in range(6 - len(value['neg'])):
 				value['neg'].append(str())
-		instr = Testinstructor(instructor_id = value['instructor_id'],
+		instr = Instructor(instructor_id = value['instructor_id'],
 		dept = value['dept'],
 		fname=value['first_name'],
 		lname = value['last_name'],
@@ -108,7 +86,51 @@ def loaddatatoInstructor():
 	return None
 
 
-
+def loadInstructorCourse():
+	with open('avg_score_ins_course_final', 'rb') as f:
+		avgscorecourse_dict = pickle.load(f)
+	for key, value in avgscorecourse_dict.items():
+		if len(value['pos']) < 6:
+			for i in range(6 - len(value['pos'])):
+				value['pos'].append(str())
+		if len(value['neg']) < 6:
+			for i in range(6 - len(value['neg'])):
+				value['neg'].append(str())
+		if isinstance(value['num_response'], type(None)):
+			value['num_response'] = 0
+		if isinstance(value['first_name'], type(None)):
+			value['first_name'] = ''
+		if isinstance(value['last_name'], type(None)):
+			value['last_name'] = ''
+		if isinstance(value['avg_score'], type(None)):
+			value['avg_score'] = 0
+		if isinstance(value['instructor_id'], type(None)):
+			value['instructor_id'] = 999999999
+		instrcourse = InstructorCourse(
+		icid = key,
+		coursename = value['course_num'],
+		coursetitle = value['course_title'],
+		courseid = int(value['course_id']),
+		instructor_id = value['instructor_id'],
+		dept = value['dept'],
+		fname = value['first_name'],
+		lname = value['last_name'],
+		pos1 = value['pos'][0],
+		pos2 = value['pos'][1],
+		pos3 = value['pos'][2],
+		pos4 = value['pos'][3],
+		pos5 = value['pos'][4],
+		pos6 = value['pos'][5],
+		neg1 = value['neg'][0],
+		neg2 = value['neg'][1],
+		neg3 = value['neg'][2],
+		neg4 = value['neg'][3],
+		neg5 = value['neg'][4],
+		neg6 = value['neg'][5],
+		coursenum_response = int(float(value['num_response'])),
+		courseavg_score = value['avg_score'])
+		instrcourse.save()
+	return None
 
 
 

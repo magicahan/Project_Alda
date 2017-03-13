@@ -2,7 +2,6 @@ import datetime
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-#from django.utils.encoding import python_2_unicode_compatible
 
 class Course(models.Model):
 	cid = models.CharField(max_length=30, primary_key = True)
@@ -35,7 +34,7 @@ class Chooseins(models.Model):
 		return str(self.inspk)
 
 
-class Testinstructor(models.Model):
+class Instructor(models.Model):
 	instructor_id = models.IntegerField(primary_key = True)
 	dept = models.CharField(max_length=30, blank = True)
 	fname = models.CharField(max_length=50, blank = True, default='')
@@ -57,5 +56,59 @@ class Testinstructor(models.Model):
 
 	def __str__(self):
 		return str(self.instructor_id)
-	
+
+
+class InstructorCourse(models.Model):
+	icid = models.IntegerField(primary_key = True)
+	dept = models.CharField(max_length=30, blank = True)
+	fname = models.CharField(max_length=50, blank = True, default='')
+	lname = models.CharField(max_length=50, blank = True, default='')
+	pos1 = models.CharField(max_length=30, blank = True, default='')
+	pos2 = models.CharField(max_length=30, blank = True, default='')
+	pos3 = models.CharField(max_length=30, blank = True, default='')
+	pos4 = models.CharField(max_length=30, blank = True, default='')
+	pos5 = models.CharField(max_length=30, blank = True, default='')
+	pos6 = models.CharField(max_length=30, blank = True, default='')
+	neg1 = models.CharField(max_length=30, blank = True, default='')
+	neg2 = models.CharField(max_length=30, blank = True, default='')
+	neg3 = models.CharField(max_length=30, blank = True, default='')
+	neg4 = models.CharField(max_length=30, blank = True, default='')
+	neg5 = models.CharField(max_length=30, blank = True, default='')
+	neg6 = models.CharField(max_length=30, blank = True, default='')
+	coursenum_response = models.IntegerField()
+	courseavg_score = models.FloatField()
+	instructor_id = models.IntegerField()
+	coursename = models.CharField(max_length=30, blank = True, default='')
+	coursetitle = models.CharField(max_length=30, blank = True, default='')
+	courseid = models.IntegerField()
+
+	def __str__(self):
+		return str(self.icid)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

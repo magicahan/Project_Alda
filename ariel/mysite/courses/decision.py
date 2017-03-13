@@ -63,7 +63,8 @@ def clean_conflicts(course_list):
     
     if len(conflicts) > 0:
         for element in conflicts:
-            combos.remove(element)
+            if element in combos:
+                combos.remove(element)
     return combos
 
 

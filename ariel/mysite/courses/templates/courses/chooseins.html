@@ -55,6 +55,7 @@
             <h1>Instructor's Evaluation</h1>
         </div>
         <div class="frame">
+        <p> Instructor's Total Evaluation Score </p>
         {% for instructor in result %}
         <table class="courses">
             <tr>
@@ -87,11 +88,28 @@
                 <th>{{ instructor.neg6 }}</th>
             </tr>
             <tr>
-                <th>Instructor's Average Score</th>
+                <th>Instructor's Total Average Score (all courses)</th>
                 <th>{{ instructor.avg_score }}</th>
             </tr>
         </table>
         {% endfor %}
+        <p> Instructor's Score for Different Courses </p>
+        <table class="courses">
+            <tr>
+                <th>Course Name</th>
+                <th>Course Number</th>
+                <th>Department</th>
+                <th>Average Score</th>
+            </tr>
+            {% for course in courseresult %}
+            <tr>
+                <th>{{ course.coursetitle }}</th>
+                <th>{{ course.coursename }}</th>
+                <th>{{ course.dept }}</th>
+                <th>{{ course.courseavg_score }}</th>
+            </tr>
+            {% endfor %}
+        </table>
         </div>
         {% endif %}
         {% if message %}
@@ -103,6 +121,9 @@
         </tr>
         </table>
         {% endif %}
+        <div class="frame">
+        <a href="{% url 'courses:index' %}">Back to Course Search</a>
+        </div>
     </body>
 </html>
 

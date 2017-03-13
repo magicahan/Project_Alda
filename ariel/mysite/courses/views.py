@@ -10,7 +10,7 @@ import sys
 import os
 from django.db.models import Q
 
-from .models import Course, Chooseins, Testinstructor
+from .models import Course, Chooseins, Instructor, InstructorCourse
 from .find_courses import find_courses
 from .enroll_crawler import *
 from .decision import *
@@ -131,11 +131,24 @@ class ChooseinsView(generic.DetailView):
                         namels = res.split()
                         fname = namels[0].lower()
                         lname = namels[-1].lower()
-                        res = Testinstructor.objects.filter(Q(fname__contains=fname) & Q(lname__contains=lname))
-                        if len(res) == 0:
+                        res = Instructor.objects.filter(Q(fname__contains=fname) & Q(lname__contains=lname))
+                        iidls = []
+                        for i in res:
+                            iid = i.instructor_id
+                            iidls.append(iid)
+                        courseres = InstructorCourse.objects.filter(instructor_id__in=iidls)
+                        if len(res) != 1:
                             self.context['message'] = "Sorry, this instructor doesn't have evaluation yet."
                             self.context['result'] = ['']
                         else:
                             self.context['message'] = None
                             self.context['result'] = res
+                            self.context['courseresult'] = courseres
         return render(request, self.template_name, self.context)
+
+
+
+
+
+
+
