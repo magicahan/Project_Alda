@@ -156,5 +156,4 @@ def builder(course_list, file_name):
                                                         num_cells)
         write_schedule(template, starting_cells, \
                        merge_patterns, course)
-
     wb.save(file_name)
