@@ -1,10 +1,20 @@
+### Project Alda
+### Django Main scrpit
+### Ningyin Xu Mar. 4th
+
+###############################################################################
+    
+    # To run this, you need to install the newest Django.
+    # sudo pip3 install -U django
+
+###############################################################################
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.template import loader
 from django.views import generic
 from django import forms
-import django_tables2 as tables
 import traceback
 import sys
 import os

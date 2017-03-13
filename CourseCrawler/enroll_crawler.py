@@ -28,6 +28,10 @@ COURSE_URL = 'https://coursesearch.uchicago.edu/psc/prdguest/EMPLOYEE/HRMS/c/UC_
 
 
 def setup_driver(course_url):
+    '''
+    Setup PhantomJS, redirect to Course Search page, fix quarter as "Spring 2017".
+    Get ready to scrape in this page.
+    '''
     dothething = True
     while dothething:
         try:
@@ -52,7 +56,9 @@ def setup_driver(course_url):
 
 
 def course_enroll(course_dept, course_num):
-
+    '''
+    Given course name, scrape the enrollment info.
+    '''
     driver = setup_driver(COURSE_URL)
 
     course_search = course_dept + ' ' + course_num
@@ -85,6 +91,9 @@ def course_enroll(course_dept, course_num):
 
 
 def main(course_dept, course_num, emailto):
+    '''
+    main function, sending email notification.
+    '''
     enroll = course_enroll(course_dept, course_num)
 
     if enroll:
@@ -111,11 +120,6 @@ def main(course_dept, course_num, emailto):
     else:
         return False
 
-
-# def startscraping(course_dept, course_num, emailto):
-#     x = datetime.today()
-#     y = x.replace()
-    
 
 
 

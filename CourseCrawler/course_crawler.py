@@ -24,6 +24,10 @@ import pandas as pd
 
 
 def setup_driver(course_url):
+	'''
+	Setup PhantomJS, redirect to Course Search page, fix quarter as "Spring 2017".
+	Get ready to scrape in this page.
+	'''
 	dothething = True
 	while dothething:
 		try:
@@ -47,6 +51,12 @@ def setup_driver(course_url):
 			continue
 
 
+## Following code is used when I first scraped courses. It's for scraping
+## all the department name so I could search and scrape courses under
+## each department. Then I exported the outcome list of this function as
+## a .json file, so when I scrape again, I only need to import the .json
+## file: dept_ls.json.
+
 # def find_dept_ls(course_url):
 # 	driver = setup_driver(course_url)
 
@@ -62,6 +72,10 @@ def setup_driver(course_url):
 
 
 def one_page_crawler(results_one_page, driver, courses_dict):
+	'''
+	Scrape one page (25 courses maximum) in the search result pages after
+	specify the department.
+	'''
 	for i in range(results_one_page):
 		coursechunk = 'DESCR100$0_row_' + str(i)
 		test = driver.find_element_by_id('win0divUC_SR0047_WRK_GROUPBOX18$0')
@@ -140,6 +154,9 @@ def one_page_crawler(results_one_page, driver, courses_dict):
 
 
 def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
+	'''
+	Scrape courses for one department.
+	'''
 
 	driver = setup_driver(course_url)
 
@@ -154,7 +171,9 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 		else:
 			continue
 
-	#driver.implicitly_wait(10)
+	#driver.implicitly_wait(10) 
+	# In this scraper, implicit waiting doesn't work very well, I don't know why.
+	# I changed to explicit waiting in most cases.
 
 	searchbutton = driver.find_element_by_id('UC_CLSRCH_WRK2_SEARCH_BTN')
 	searchbutton.click()
@@ -227,13 +246,18 @@ def one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls):
 
 
 def course_crawler(dept_ls, courses_dict, course_url):
+	'''
+	Given a list of department, scrape all the data, and save the data 
+	into courses_dict.
+	'''
 	for dept in dept_ls:
 		print('this is dept: ' + dept)
 		dothething = 0
 		while dothething < 5:
 			try:
 				timeoutdept_ls = []
-				courses_dict, timeoutdept_ls = one_dept_crawler(dept, courses_dict, course_url, timeoutdept_ls)
+				courses_dict, timeoutdept_ls = one_dept_crawler(
+					dept, courses_dict, course_url, timeoutdept_ls)
 				break
 			except StaleElementReferenceException:
 				print('StaleElementRefernceException')

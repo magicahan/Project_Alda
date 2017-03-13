@@ -1,3 +1,14 @@
+### Project Alda
+### Django Data Loading
+### Ningyin Xu Mar. 4th
+
+###############################################################################
+    
+    # After setting up models in django, you can use this file to load data
+    # into them. 
+
+###############################################################################
+
 from courses.models import Course, Chooseins, Instructor, InstructorCourse
 import json
 import csv

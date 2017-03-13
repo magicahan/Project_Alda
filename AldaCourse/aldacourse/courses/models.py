@@ -1,3 +1,14 @@
+### Project Alda
+### Django Model script
+### Ningyin Xu Mar. 4th
+
+###############################################################################
+    
+    # After setting up models, you can use loaddata.py from loaddata folder
+    # to load data into models.
+
+###############################################################################
+
 import datetime
 from django.db import models
 from django.db.models import Q
