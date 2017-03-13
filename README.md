@@ -8,16 +8,21 @@ The University of Chicago | Winter 2017
 This repository contains the final course project for CAPP 30122. 
 
 ## About all sub-directories:
-* <code>data</code>: contains our exploratory data analysis and all plots we 
-generated to visualize several variables.
+* <code>AldaCourse</code>: contains all individual components of Project ALDA 
+listed below together with a Django interface.
 
-* <code>markov process</code>: contains several scripts we composed to estimate 
-the Markov stochastic matrix and expenditure estimations.
+* <code>CourseCrawler</code>: contains all scripts necessary to complete the 
+tasks of logging in to <my.uchicago.edu> and scrapping all course informations.
 
-* <code>paper</code>: contains the tex file we used to build our final report 
-and a pdf copy of our report.
+* <code>NLTK</code>: contains python scripts used to select the top 6 positive
+ and negative words from each evaluation comments.
 
-* <code>slides</code>: contains our presentation slides.
+* <code> ScheduleVisualization</code>: contains python scripts and 
+template.xlms file used to create all possible combinations of non-conflict 
+courses schedules based on user input. 
+
+* <code>Project_Info</code>: contains project description files and 
+the presentation slides.
 
 ## Contributors
 Alice Mee Seon Chung [Alicechung](https://github.com/Alicechung)
