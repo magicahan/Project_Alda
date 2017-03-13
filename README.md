@@ -14,6 +14,9 @@ listed below together with a Django interface.
 * <code>CourseCrawler</code>: contains all scripts necessary to complete the 
 tasks of logging in to <my.uchicago.edu> and scrapping all course informations.
 
+* <code>CourseEvaluation</code>: contains all scripts necessary to scrap 
+course evalations.
+
 * <code>NLTK</code>: contains python scripts used to select the top 6 positive
  and negative words from each evaluation comments.
 
