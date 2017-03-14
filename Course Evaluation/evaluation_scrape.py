@@ -753,6 +753,7 @@ if __name__ == '__main__':
             url_list = pickle.load(fp)
     create_ecvaluation_table(eval_url, cookie, dept_list, year_list, course_num_dict,\
                       instructor_num_dict, url_list, driver, user_name, password, overwrite = True)
+    get_sql('instructor_comments.csv')
         
 
     driver.quit()
