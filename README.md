@@ -29,9 +29,10 @@ the presentation slides.
 
 ## Required Packages:
 * Selenium (v3.3.1)
-* PhantomJS (v2.1)
 * Openpyxl (v2.4.5)
 * Django (v1.10.6)
+* PhantomJS (v2.1) -- need to be installed separately
+    + reference: [Phantomjs.org Download Page](http://phantomjs.org/download.html)
 
 ## How to use our program:
 * 1. Fire up a terminal, and go to the directory you want to store AldaCourse.
