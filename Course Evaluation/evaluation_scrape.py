@@ -202,13 +202,10 @@ def compile_instructor_num(eval_url, cookie, dept_list, year_list, count):
                 continue
             rows = table.find_all('tr')
             for row in rows:
-#                time.sleep(0.3)
-#                start = time.time()
                 new_url = eval_url + row.find('a')['href']
                 new_req, new_page = get_request(new_url, cookie)
                 if new_req == None:
                     continue
-#                print("load the page", time.time() - start)
                 page_paragraph = new_page.find('p')
                 if page_paragraph != None:
                     if len(page_paragraph.contents)>1:
@@ -241,11 +238,9 @@ def compile_instructor_num(eval_url, cookie, dept_list, year_list, count):
                         name_list = instructor.split()
                         name_list = [i.lower() for i in name_list]
                         name_list = [name_list[0], ' '.join(name_list[1:])]
-#                    name_tup = tuple([i.strip().lower() for i in name_list])
                     name = ', '.join(name_list)
                     name_tup = (name, dept)
                     instructor_num_set.add(name_tup)
-#                print("find instructor", time.time() - start)
         print("At the {}th department {}, year{}".format(i, dept, year))
     instructor_num_list = sorted(list(instructor_num_set))
     for instruct_tup in instructor_num_list:
@@ -275,6 +270,7 @@ def create_main_table(eval_url, cookie, dept_list, year_list, course_num_dict,\
             search_terms = {'Department': dept, 'AcademicYear': year,\
                             'EvalSearchType':'option-dept-search'}
             cur_req, cur_page = get_request(eval_url, cookie, search_terms)
+            ## the course table is tagged as tbody
             table = cur_page.find('tbody')
             if table == None:
                 continue
@@ -504,6 +500,7 @@ def create_ecvaluation_table(eval_url, cookie, dept_list, year_list, course_num_
                              url_dict, ins_list, na_flag, True)
             for i in range(5):
                 tag = tag.next_sibling
+                ## deal with the table with explanation section in between
                 try:
                     if 'explain' in tag.text.lower():
                         while tag.name!= 'table':
@@ -583,16 +580,19 @@ def compute_tr_score(tag, ins_score_table, total_scores, url_dict, ins_list, na_
                 url_dict['instructor'], url_dict['quarter'], url_dict['tot_response']
     tag_tr_list = tag.find_all('tr')
     for i, row in enumerate(tag_tr_list):
+        ## check if the table contains the non response counter
         if i == 0 and check_first == True:
             scale_list = row.find_all('th')
             for scale in scale_list:
                 if scale.text == 'N/A':
                     na_flag = True
         else:
+            ## avoind line breaker
             score_term = row.find_all('th')[0].text
             if score_term == '\xa0':
                 continue
             score_list = row.find_all('td')
+            ## if there is non response
             if na_flag:
                 score_list = score_list[1:]
             total_score = 0
@@ -721,6 +721,7 @@ if __name__ == '__main__':
             previous = time.time()
             instructor_num_dict, count = compile_instructor_num(eval_url, \
                                         cookie, [dept], year_list, count)
+            ## code to reload the dictionary for ever department
             if i == 0:
                 old_dict = {}
                 counter = {}
