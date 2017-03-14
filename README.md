@@ -34,17 +34,29 @@ the presentation slides.
 * Django (v1.10.6)
 
 ## How to use our program:
-* 1. Open your terminal and direct to the directory called **Project_ALDA**
-* 2. In your terminal, type in <code>sh alda_prep.sh</code>. 
+* 1. Fire up a terminal, and go to the directory you want to store AldaCourse
+* 2. In the directory of your choice, run this command to clone the git 
+repository:<code>git clone https://github.com/dpzhang/Project_ALDA.git</code>
+* 3. After cloning the git repo, you will find a new local sub-directory called 
+**Project_ALDA**
+* 4. In your terminal, type in <code>sh alda_prep.sh</code> 
     + After typing in this line of code, you might be asked to input your 
-      password.
+      password
     + After inputting your password, it would start to install all required
-      packages so as to ensure Project ALDA would run successfully and 
-      smoothly.
-* 3. **Open a new terminal**, and type in <code>sh alda_init.sh</code>. It 
+      packages so as to ensure AldaCourse could run successfully and 
+      smoothly in your machine
+* 5. **Open a new terminal**, and type in <code>sh alda_init.sh</code>. It 
      would automatically open your default web browser and you will see our 
-     interface, powered by Django, in front of you. 
-* 4. Lay back, relax, and lets fly! 
+     interface, powered by Django, in front of you
+* 6. The generated course schedules could be found in <code>./Project_Alda/AldaCourse/aldacourse/schedule#.xlsx</code>
+    + Based on the combination of courses you select, AldaCourse can 
+      intelligently generate all feasible and non-conflicted course schedules 
+      that best staisfy your demand.
+    + The output course schedule are all in <code>.xlsx</code> spreadsheet 
+format and the number of generated spreadsheets will soly depend on the 
+combination of courses you select.
+ 
+* 7. Lay back, relax, and lets fly! 
 
 ## Contributors
 **Alice Mee Seon Chung** [Alicechung](https://github.com/Alicechung)
