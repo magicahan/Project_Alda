@@ -36,7 +36,8 @@ the presentation slides.
 ## How to use our program:
 * 1. Fire up a terminal, and go to the directory you want to store AldaCourse.
 * 2. In the directory of your choice, run this command to clone the git 
-repository:<code>git clone https://github.com/dpzhang/Project_ALDA.git</code>
+ epository: <br /> 
+<code>git clone https://github.com/dpzhang/Project_ALDA.git</code>
 * 3. After cloning the git repo, you will find a new local sub-directory called 
 **Project_ALDA**.
 * 4. In your terminal, type in <code>sh alda_prep.sh</code>. 

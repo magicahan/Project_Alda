@@ -1,6 +1,6 @@
 #!/bin/bash  
  
-# Bash script for installing most modules for Whiteboard.
+# Bash script for installing most modules for AldaCourse.
 
 sudo apt-get clean
 sudo apt-get update
