@@ -9,5 +9,5 @@ sudo python3 -m pip install selenium
 sudo python3 -m pip install numpy
 sudo python3 -m pip install re
 sudo python3 -m pip install openpyxl
-cd AldaCourse/aldacourse/r
+cd AldaCourse/aldacourse/
 python3 manage.py runserver
