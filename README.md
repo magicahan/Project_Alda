@@ -27,6 +27,12 @@ courses schedules based on user input.
 * <code>Project_Info</code>: contains project description files and 
 the presentation slides.
 
+## Packages that we used:
+* Selenium (v3.3.1)
+* PhantomJS (v2.1)
+* Openpyxl (v2.4.5)
+* Django (v1.10.6)
+
 ## How to use our program:
 * 1. Open your terminal and direct to the directory called **Project_ALDA**
 * 2. In your terminal, type in <code>sh alda_prep.sh</code>. 
@@ -39,11 +45,6 @@ the presentation slides.
      would automatically open your default web browser and you will see our 
      interface, powered by Django, in front of you. 
 * 4. Lay back, relax, and lets fly! 
-
-## Packages that we used:
-* Selenium
-* PhantomJS
-* Openpyxl
 
 ## Contributors
 **Alice Mee Seon Chung** [Alicechung](https://github.com/Alicechung)
