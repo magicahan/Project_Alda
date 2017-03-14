@@ -27,7 +27,7 @@ courses schedules based on user input.
 * <code>Project_Info</code>: contains project description files and 
 the presentation slides.
 
-## Packages that we used:
+## Required Packages:
 * Selenium (v3.3.1)
 * PhantomJS (v2.1)
 * Openpyxl (v2.4.5)
