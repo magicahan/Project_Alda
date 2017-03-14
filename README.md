@@ -27,6 +27,19 @@ courses schedules based on user input.
 * <code>Project_Info</code>: contains project description files and 
 the presentation slides.
 
+## How to use our program:
+* 1. Open your terminal and direct to the directory called **Project_ALDA**
+* 2. In your terminal, type in <code>sh alda_prep.sh</code>. 
+    + After typing in this line of code, you might be asked to input your 
+      password.
+    + After inputting your password, it would start to install all required
+      packages so as to ensure Project ALDA would run successfully and 
+      smoothly.
+* 3. **Open a new terminal**, and type in <code>sh alda_init.sh</code>. It 
+     would automatically open your default web browser and you will see our 
+     interface, powered by Django, in front of you. 
+* 4. Lay back, relax, and lets fly! 
+
 ## Packages that we used:
 * Selenium
 * PhantomJS
